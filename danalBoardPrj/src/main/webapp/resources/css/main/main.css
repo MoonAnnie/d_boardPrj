@@ -1,0 +1,17 @@
+main{
+    position: relative;
+    width: 1200px;
+    height: 650px;  
+    overflow: hidden;
+}
+.main-img{
+	width: 1000px;
+	display: center;
+}
+.main-img div img{
+	width: 1000px;
+	--display: center;
+	height: 600px;
+	margin-top: 5px;
+	--margin-left: 200px;
+}

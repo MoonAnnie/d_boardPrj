@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+		<setting name="jdbcTypeForNull" value="NULL"/>
+	</settings>
+	
+	<typeAliases>
+		<typeAlias type="com.danal.djmoon.member.vo.MemberVo" alias="MemberVo"/>
+		<typeAlias type="com.danal.djmoon.community.vo.BoardVo" alias="BoardVo"/>
+		<typeAlias type="com.danal.djmoon.community.vo.BoardCmtVo" alias="BoardCmtVo"/>
+	</typeAliases>
+	
+	<!-- Spring에서 DataSource를 주입 받기 위한 설정 2023-08-21-->
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="org.sqlite.JDBC"/>
+				<property name="url" value="jdbc:sqlite:D:\djmoon\dev\sourcetree\boardPrj\danalBoardPrj\djmoondb.db"/>
+			</dataSource>
+		</environment>
+	</environments>
+	
+</configuration>

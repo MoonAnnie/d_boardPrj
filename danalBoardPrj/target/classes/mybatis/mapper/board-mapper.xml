@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boardMapper">
+
+	<!-- 게시글 갯수 조회 -->
+    <select id="selectCnt" resultType="int">
+       SELECT COUNT(*) AS CNT 
+       FROM COMMUNITY
+       INNER JOIN MEMBER ON COMMUNITY.MEMBER_NO = MEMBER.NO
+       WHERE COMMUNITY.DELETE_YN = 'N'
+       <if test="search != null and !search.isEmpty()">
+           <choose>
+               <when test="searchType.equals('0')">
+                   AND TITLE LIKE '%' || #{search} || '%'
+               </when>
+               <when test="searchType.equals('1')">
+                   AND NAME LIKE '%' || #{search} || '%'
+               </when>
+           </choose>
+       </if>
+   </select>
+   
+   <!-- 게시글 갯수 조회 by 제목 -->
+    <select id="selectCntByTitle" resultType="int">
+       SELECT COUNT(*) AS CNT 
+       FROM COMMUNITY
+       INNER JOIN MEMBER ON COMMUNITY.MEMBER_NO = MEMBER.NO
+       WHERE COMMUNITY.DELETE_YN = 'N'
+       AND TITLE LIKE '%' || #{search} || '%'
+   </select>		
+   
+   <!-- 게시글 갯수 조회 by 작성자 -->
+    <select id="selectCntByName" resultType="int">
+       SELECT COUNT(*) AS CNT 
+       FROM COMMUNITY
+       INNER JOIN MEMBER ON COMMUNITY.MEMBER_NO = MEMBER.NO
+       WHERE COMMUNITY.DELETE_YN = 'N'
+       AND NAME LIKE '%' || #{search} || '%'
+   </select>	
+   
+	<!-- 게시글 조회 -->
+    <select id="selectList" resultType="com.danal.djmoon.community.vo.BoardVo">
+        SELECT *, (SELECT rowid FROM COMMUNITY WHERE COMMUNITY.NO = C.NO) AS CUSTOM_ROWID
+        FROM (
+            SELECT COMMUNITY.NO, MEMBER.NAME, COMMUNITY.MEMBER_NO, MEMBER.NO, COMMUNITY.TITLE,
+            COMMUNITY.CONTENT, strftime('%Y-%m-%d', COMMUNITY.ENROLL_DATE) AS ENROLL_DATE, COMMUNITY.DELETE_YN, COMMUNITY.HIT
+            FROM COMMUNITY
+            INNER JOIN MEMBER ON COMMUNITY.MEMBER_NO = MEMBER.NO
+        ) AS C
+        WHERE DELETE_YN = 'N'
+<!--          <if test="search != null and !search.isEmpty()">
+            <choose>
+                <when test="searchType.equals('0')">
+                    AND TITLE LIKE '%'|| #{search}||'%'
+                </when>
+                <when test="searchType.equals('1')">
+                    AND NAME LIKE '%'||#{search}||'%'
+                </when>
+            </choose>
+        </if> --> <!-- if문이 제대로 작동이 안돼서 아래처럼 sql문을 구분함 -->
+        ORDER BY NO DESC
+        LIMIT #{boardLimit} OFFSET #{offset} <!-- limit 에서 boardLimit으로 변경 -->
+    </select>
+    
+    <!-- 게시글 조회 by 제목 -->
+    <select id="selectListByTitle" resultType="com.danal.djmoon.community.vo.BoardVo">
+        SELECT *, (SELECT rowid FROM COMMUNITY WHERE COMMUNITY.NO = C.NO) AS CUSTOM_ROWID
+        FROM (
+            SELECT COMMUNITY.NO, MEMBER.NAME, COMMUNITY.MEMBER_NO, MEMBER.NO, COMMUNITY.TITLE,
+            COMMUNITY.CONTENT, strftime('%Y-%m-%d', COMMUNITY.ENROLL_DATE) AS ENROLL_DATE, COMMUNITY.DELETE_YN, COMMUNITY.HIT
+            FROM COMMUNITY
+            INNER JOIN MEMBER ON COMMUNITY.MEMBER_NO = MEMBER.NO
+        ) AS C
+        WHERE DELETE_YN = 'N'
+        AND TITLE LIKE '%'|| #{search}||'%'
+        ORDER BY NO DESC
+        LIMIT #{boardLimit} OFFSET #{offset} <!-- limit 에서 boardLimit으로 변경 -->
+    </select>
+    
+    <!-- 게시글 조회 by 작성자 -->
+    <select id="selectListByName" resultType="com.danal.djmoon.community.vo.BoardVo">
+        SELECT *, (SELECT rowid FROM COMMUNITY WHERE COMMUNITY.NO = C.NO) AS CUSTOM_ROWID
+        FROM (
+            SELECT COMMUNITY.NO, MEMBER.NAME, COMMUNITY.MEMBER_NO, MEMBER.NO, COMMUNITY.TITLE,
+            COMMUNITY.CONTENT, strftime('%Y-%m-%d', COMMUNITY.ENROLL_DATE) AS ENROLL_DATE, COMMUNITY.DELETE_YN, COMMUNITY.HIT
+            FROM COMMUNITY
+            INNER JOIN MEMBER ON COMMUNITY.MEMBER_NO = MEMBER.NO
+        ) AS C
+        WHERE DELETE_YN = 'N'
+        AND NAME LIKE '%'|| #{search}||'%'
+        ORDER BY NO DESC
+        LIMIT #{boardLimit} OFFSET #{offset} <!-- limit 에서 boardLimit으로 변경 -->
+    </select>
+    
+    <!-- 게시글 작성 -->
+	<insert id="write">
+	    INSERT INTO COMMUNITY 
+	    (MEMBER_NO, TITLE, CONTENT, ENROLL_DATE)
+	    VALUES
+	    (#{memberNo}, #{title}, #{content}, datetime('now', 'localtime'))
+    </insert>
+    
+    <!-- 조회수 증가 -->
+   	<update id="increaseHit">
+		UPDATE COMMUNITY 
+		SET HIT = HIT + 1 
+		WHERE NO = #{no} 
+		AND DELETE_YN = 'N'
+	</update>
+	
+	<!-- 게시글 상세 조회 -->
+	<select id="selectInfoOne" resultType="BoardVo">
+		SELECT C.NO, C.TITLE, C.CONTENT, strftime('%Y-%m-%d', C.ENROLL_DATE) AS ENROLL_DATE, C.HIT, C.DELETE_YN, C.MEMBER_NO, M.NAME
+		FROM COMMUNITY C 
+		JOIN MEMBER M ON M.NO = C.MEMBER_NO 
+		WHERE C.NO = #{no} AND C.DELETE_YN = 'N'
+	</select>  
+	
+	<!-- 게시글 수정 -->
+  	<update id="updateInfoOne">
+	  	UPDATE COMMUNITY 
+	  	SET TITLE = #{title}, CONTENT = #{content}, MODIFY_DATE = datetime('now', 'localtime') 
+	  	WHERE NO = #{no}
+	</update> 
+	
+	<!-- 게시글 삭제 -->
+	<update id="deleteInfoOne">
+		UPDATE COMMUNITY 
+		SET DELETE_YN = 'Y' 
+		WHERE NO = #{no}
+	</update>
+	
+	<!-- 댓글 작성 -->
+	<insert id="insertCmt">
+		INSERT INTO COMMENT(POST_NO, WRITER, CMT, ENROLL_DATE, MODIFY_DATE) 
+		VALUES (#{postNo}, #{writer}, #{cmt}, datetime('now', 'localtime'), datetime('now', 'localtime'))
+	</insert>
+	
+	<!-- 댓글 조회 -->
+	<select id="selectCommCmt" resultType="BoardCmtVo">
+		SELECT C.CMT_NO, C.POST_NO, C.WRITER, C.ENROLL_DATE, C.MODIFY_DATE, C.CMT, M.NAME 
+		FROM COMMENT C 
+		JOIN MEMBER M ON C.WRITER = M.NO 
+		WHERE POST_NO = #{postNo} 
+		AND DELETE_YN = 'N'
+		ORDER BY C.ENROLL_DATE DESC
+	</select>
+	
+	<!-- 댓글 삭제 -->
+	<update id="cmtDelete">
+		UPDATE COMMENT SET DELETE_YN = 'Y' WHERE CMT_NO = #{cmtNo}
+	</update>
+	
+</mapper>

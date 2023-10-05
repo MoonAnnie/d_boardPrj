@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
+		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	
+	<!-- database -->
+<!-- 	  <bean id="dbcpSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+	      <property name="driverClass" value="org.sqlite.JDBC"/>
+	      <property name="url" value="jdbc:sqlite:D:\djmoon\dev\setup\sqlight"/>
+	      <property name="username" value=""/>
+	      <property name="password" value=""/>
+	   </bean> -->
+	   
+	   <!-- 새로운 설정 2023-08-21 -->
+		<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		    <property name="driverClassName" value="org.sqlite.JDBC" />
+		    <property name="url" value="jdbc:sqlite:D:\djmoon\dev\sourcetree\boardPrj\danalBoardPrj\djmoondb.db" />
+		</bean>
+	   
+<!-- 		<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+		    <property name="driverClass" value="org.sqlite.JDBC" />
+		    <property name="url" value="jdbc:sqlite:D:\djmoon\dev\setup\sqlight" />
+		    <property name="username" value=""/>
+		    <property name="password" value=""/>
+	  	</bean> -->
+   
+   <!-- SqlSessionFactoryBean -->
+<!--     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+      <property name="dataSource" ref="dbcpSource"/>
+      <property name="configLocation" value="classpath:/mybatis/config.xml"/>
+      <property name="mapperLocations" value="classpath:/mybatis/**/*-mapper.xml"/>
+   </bean>  -->
+   
+   <!-- mapper 파일 사용을 위해 아래로 수정 -->
+<!--    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+      <property name="dataSource" ref="dataSource"/>
+      <property name="configLocation" value="classpath:/mybatis/config.xml"/>
+      <property name="mapperLocations" value="classpath:/mybatis/**/*-mapper.xml"/>
+   </bean> -->
+   <!-- 새로운 설정 2023-08-21-->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	    <property name="dataSource" ref="dataSource"/>
+	    <property name="configLocation" value="classpath:/mybatis/config.xml"/>
+	    <property name="mapperLocations" value="classpath:/mybatis/**/*-mapper.xml"/>
+	</bean>
+   
+   <!-- SqlSessionTemplate -->
+   <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+      <constructor-arg index="0" ref="sqlSessionFactory"/>
+   </bean>
+   
+   <!-- Transaction -->
+<!--    	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dbcpSource"></property>
+	</bean>  -->
+	
+	<!-- 트랜잭션 관리 설정 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	    <property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<!-- filter (UTF-8로 인코딩 하는 필터) -->
+	<bean id="delegatingFilterProxy" class="org.springframework.web.filter.CharacterEncodingFilter">
+		<constructor-arg name="encoding" value="UTF-8" />
+	</bean>
+
+		<!-- 원래대로 -->
+</beans>

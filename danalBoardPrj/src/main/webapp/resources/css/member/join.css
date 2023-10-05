@@ -1,0 +1,193 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  a {
+    text-decoration: none;
+    color: rgb(122, 119, 116);
+  }
+  
+  .wrap {
+    width: 1000px;
+    height: 700px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+  }
+  
+  .join {
+  /*   width: 30%;
+    height: 600px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+   */  
+    position: absolute;
+    top: 220px;
+    --left: 282.011px;
+    width: 500px;
+    height: 600px;
+    transform: rotate(0rad);
+    --border: 3px solid orange;
+    background-color: rgba(224, 224, 224, 0.64);
+    border-radius: 10%;
+  }
+  
+  h2 {
+   /*  color: rgb(0, 0, 0);
+    font-size: 2em; */
+    
+    color: rgb(255, 255, 255);
+    background-color: rgb(231, 76, 60);
+    padding: 15px;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 16px;
+    margin-top: 20px;
+    width: 80%;
+    margin-left: 50px;
+  }
+  .check_id, .check_nick, .check_email, .check_phone{
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .join_id, .join_pw, .join_pw2, .join_name, .join_phone, .join_nick, .join_address, .join_email{
+    margin-top: 30px;
+    width: 80%;
+  }
+  
+  .join_pw input, .join_pw2 input, .join_name input {
+    width: 70%;
+    height: 30px;
+    border-radius: 30px;
+    margin-top: 10px;
+    padding: 0px 20px;
+    border: 1px solid lightgray;
+    outline: none;
+    margin-left: 70px;
+  }
+
+  .join_id input{
+    height: 30px;
+    border-radius: 30px;
+    margin-top: 10px;
+    padding: 0px 20px;
+    border: 1px solid lightgray;
+    outline: none;
+    margin-left: 50px;
+    margin-bottom: 20px;
+  }
+  
+  .join_etc {
+    padding: 10px;
+    width: 80%;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+  }
+  
+  .submit {
+    margin-top: 30px;
+    width: 80%;
+  }
+
+  .submit input, .join_id .check_id #check_id {
+    width: 100%;
+    height: 30px;
+    border: 0;
+    outline: none;
+    border-radius: 40px;
+    background: rgb(52, 152, 219);
+    color: white;
+    font-size: 1.2em;
+    letter-spacing: 2px;
+    --margin-left: 50px;
+  }
+
+  .join_id .check_id #check_id{
+    margin-top: 50px;
+    width: 90px;
+    margin-right: 500px
+  }
+  
+  
+  h4{
+      margin-left: 50px;
+  }
+  
+  .check_id{
+  	height: 20px;
+  }
+  .join_name>h4{
+  	margin-left: 70px;
+  	width: 100%;
+  }
+  
+  #check_id_btn{
+  	height: 20px;
+  	font-size: 5px;
+  	margin-bottom: 10px;
+  }
+  
+  .check_id #check_id{
+  	width: 100%;
+  }
+  .check_id>input{
+  	width: 500px;
+  }
+  
+  .join_id{
+  	width: 90%;
+  	margin: 0 auto;
+  }
+  #join_id{
+  	margin-left: 70px;
+  }
+  #dbl-check{
+  	font-size: 5px;
+  	width: 100px;
+  }
+  .join_pw2{
+  	margin-top: 10px;
+  }
+  
+  #checkPwdResult2{
+  	margin-left: 80px;
+  	font-size: 13px;
+  }
+  
+  #join-submit{
+  	height: 50px;
+  	margin-top: 3px;
+  	margin-left: 30px;
+  }
+  .submit{
+  	margin-top: 10px;
+  }
+  #check_id_btn{
+  	width: 100px;
+  	margin-top: 15px;
+  	height: 30px;
+  	border-radius: 40px;
+  	background-color: rgb(231, 76, 60);
+  	border: 0;
+  	color: white;
+  }
+  .check_id{
+  	width: 300px;
+  }
+  h3{
+  	width: 40px;
+  }
+  #checkIdResult {
+    margin-top: 35px;
+    margin-left: 90px;
+}
